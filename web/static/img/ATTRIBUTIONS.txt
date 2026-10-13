@@ -1,3 +1,8 @@
-These mascot images were made by CELPHASE (https://bsky.app/profile/celphase.bsky.social).
+Medee fork — generic corporate status icons (happy.webp, pensive.webp, reject.webp).
 
-These images are available under the terms of the MIT license that this repository uses.
+These images were drawn in code with Pillow (flat geometric shapes, no
+third-party artwork) for the Medee corporate fork. They replace the upstream
+mascot artwork and are available under the same MIT license as this
+repository (see LICENSE).
+
+Upstream mascot artwork by CELPHASE is not shipped in this fork.

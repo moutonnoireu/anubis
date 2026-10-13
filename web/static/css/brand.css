@@ -1,0 +1,42 @@
+/* Medee — habillage corporate neutre.
+ * Surcharge le theme de base (xess) : fond clair, bleu institutionnel,
+ * polices systeme. Aucune image, aucun asset externe.
+ * Personnalisable sans rebuild via OVERLAY_DIR (voir branding/). */
+:root {
+  --body-sans-font: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --body-preformatted-font: ui-monospace, Consolas, monospace;
+  --body-title-font: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --background: #f4f6f8;
+  --text: #1a2333;
+  --link-foreground: #2456a6;
+  --link-background: transparent;
+  --progress-bar-outline: #2456a6 solid 4px;
+  --progress-bar-fill: #2456a6;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f4f6f8;
+    --text: #1a2333;
+    --link-foreground: #2456a6;
+    --link-background: transparent;
+  }
+}
+
+main {
+  background: #ffffff;
+  border: 1px solid #dfe5ec;
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  box-shadow: 0 1px 4px rgba(26, 35, 51, 0.08);
+}
+
+footer {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  color: #5b6b82;
+}
+
+footer a {
+  color: #5b6b82;
+}
