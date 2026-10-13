@@ -15,6 +15,7 @@ templ base(title string, body templ.Component, impressum *config.Impressum, hone
 		<head>
 			<title>{ title }</title>
 			<link rel="stylesheet" href={ anubis.BasePrefix + xess.URL }/>
+			<link rel="stylesheet" href={ anubis.BasePrefix + anubis.StaticPath + "css/brand.css?cacheBuster=" + anubis.Version }/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<meta name="robots" content="noindex,nofollow"/>
 			for key, value := range ogTags {
@@ -70,14 +71,16 @@ templ base(title string, body templ.Component, impressum *config.Impressum, hone
 			<main>
 				<h1 id="title" class="centered-div">{ title }</h1>
 				@body
-				<footer>
-					<div class="centered-div">
-						<p>
-							{ localizer.T("protected_by") } <a href="https://github.com/TecharoHQ/anubis">Anubis</a> { localizer.T("protected_from") } <a
-	href="https://techaro.lol"
->Techaro</a>. { localizer.T("made_with") }.
-						</p>
-						<p>{ localizer.T("mascot_design") } <a href="https://bsky.app/profile/celphase.bsky.social">{ localizer.T("celphase") }</a>.</p>
+			<footer>
+				<div class="centered-div">
+					<p>
+						{ localizer.T("protected_by") }
+						if anubis.BrandLink != "" {
+							<a href={ anubis.BrandLink }>{ anubis.BrandName }</a>
+						} else {
+							{ anubis.BrandName }
+						}
+					</p>
 						if impressum != nil {
 							<p>
 								@templ.Raw(impressum.Footer)
@@ -94,7 +97,7 @@ templ base(title string, body templ.Component, impressum *config.Impressum, hone
 
 templ errorPage(message, mail, code string, localizer *localization.SimpleLocalizer) {
 	<div class="centered-div">
-		<img id="image" alt="Sad Anubis" style="width:100%;max-width:256px;" src={ anubis.BasePrefix + "/.within.website/x/cmd/anubis/static/img/reject.webp?cacheBuster=" + anubis.Version }/>
+		<img id="image" alt="Security check status" style="width:100%;max-width:256px;" src={ anubis.BasePrefix + "/.within.website/x/cmd/anubis/static/img/reject.webp?cacheBuster=" + anubis.Version }/>
 		<p>{ message }.</p>
 		if code != "" {
 			<code><pre>{ code }</pre></code>

@@ -1,0 +1,8 @@
+/* Exemple de surcharge via OVERLAY_DIR (monter avec OVERLAY_DIR=./branding).
+ * Ce fichier remplace le theme embarque web/static/css/brand.css.
+ * Copier ce dossier comme base et ajuster les couleurs. */
+:root {
+  --link-foreground: #0f4c81;
+  --progress-bar-fill: #0f4c81;
+  --progress-bar-outline: #0f4c81 solid 4px;
+}

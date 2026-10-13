@@ -44,6 +44,11 @@ type Options struct {
 	DynamicCookieSuffix       bool
 	BasePrefix                string
 	WebmasterEmail            string
+	BrandName                 string
+	BrandLink                 string
+	ChallengeTitle            string
+	ErrorTitle                string
+	OverlayDir                string
 	RedirectDomains           []string
 	ED25519PrivateKey         ed25519.PrivateKey
 	HS512Secret               []byte
@@ -153,6 +158,15 @@ func New(opts Options) (*Server, error) {
 	anubis.BasePrefix = strings.TrimRight(opts.BasePrefix, "/")
 	anubis.PublicUrl = opts.PublicUrl
 
+	// Corporate branding (Medee fork): override the product name and link
+	// shown on challenge/error pages. Empty means keep the defaults.
+	if opts.BrandName != "" {
+		anubis.BrandName = opts.BrandName
+	}
+	if opts.BrandLink != "" {
+		anubis.BrandLink = opts.BrandLink
+	}
+
 	result := &Server{
 		next:        opts.Next,
 		ed25519Priv: opts.ED25519PrivateKey,
@@ -191,7 +205,14 @@ func New(opts Options) (*Server, error) {
 
 	// Ensure there's no double slash when concatenating BasePrefix and StaticPath
 	stripPrefix := strings.TrimSuffix(anubis.BasePrefix, "/") + anubis.StaticPath
-	registerWithPrefix(anubis.StaticPath, internal.UnchangingCache(internal.NoBrowsing(http.StripPrefix(stripPrefix, http.FileServerFS(web.Static)))), "")
+	// OVERLAY_DIR lets deployments replace images/CSS without rebuilding:
+	// files present in the overlay win, everything else falls back to the
+	// embedded assets. See branding/ for an example layout.
+	staticFS := http.FS(web.Static)
+	if opts.OverlayDir != "" {
+		staticFS = fallbackFS{primary: http.Dir(opts.OverlayDir), fallback: http.FS(web.Static)}
+	}
+	registerWithPrefix(anubis.StaticPath, internal.UnchangingCache(internal.NoBrowsing(http.StripPrefix(stripPrefix, http.FileServer(staticFS)))), "")
 
 	if opts.ServeRobotsTXT {
 		registerWithPrefix("/robots.txt", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -264,4 +285,18 @@ func New(opts Options) (*Server, error) {
 	result.mux = mux
 
 	return result, nil
+}
+
+// fallbackFS serves files from primary (overlay directory) when present and
+// falls back to fallback (embedded assets) otherwise. Used by OVERLAY_DIR.
+type fallbackFS struct {
+	primary  http.FileSystem
+	fallback http.FileSystem
+}
+
+func (f fallbackFS) Open(name string) (http.File, error) {
+	if file, err := f.primary.Open(name); err == nil {
+		return file, nil
+	}
+	return f.fallback.Open(name)
 }

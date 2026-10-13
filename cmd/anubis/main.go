@@ -81,6 +81,11 @@ var (
 	ogCacheConsiderHost      = flag.Bool("og-cache-consider-host", false, "enable or disable the use of the host in the Open Graph tag cache")
 	extractResources         = flag.String("extract-resources", "", "if set, extract the static resources to the specified folder")
 	webmasterEmail           = flag.String("webmaster-email", "", "if set, displays webmaster's email on the reject page for appeals")
+	brandName                = flag.String("brand-name", "Medee", "product name shown on challenge and error pages")
+	brandLink                = flag.String("brand-link", "", "optional URL linked from the product name in the footer")
+	challengeTitle           = flag.String("challenge-title", "", "if set, overrides the challenge page title")
+	errorTitle               = flag.String("error-title", "", "if set, overrides the error page title")
+	overlayDir               = flag.String("overlay-dir", "", "if set, serve static assets from this folder with fallback to the embedded assets, see branding/ for the expected layout")
 	versionFlag              = flag.Bool("version", false, "print Anubis version")
 	publicUrl                = flag.String("public-url", "", "the externally accessible URL for this Anubis instance, used for constructing redirect URLs (e.g., for forwardAuth).")
 	xffStripPrivate          = flag.Bool("xff-strip-private", true, "if set, strip private addresses from X-Forwarded-For")
@@ -240,7 +245,7 @@ func main() {
 	uuid.EnableRandPool()
 
 	if *versionFlag {
-		fmt.Println("Anubis", anubis.Version)
+		fmt.Println(*brandName, anubis.Version)
 		return
 	}
 
@@ -283,7 +288,7 @@ func run(ctx context.Context) {
 	internal.SetHealth("anubis", healthv1.HealthCheckResponse_NOT_SERVING)
 
 	lg := internal.InitSlog(*slogLevel, os.Stderr)
-	lg.InfoContext(ctx, "starting up Anubis")
+	lg.InfoContext(ctx, "starting up", "product", *brandName)
 
 	wg := new(sync.WaitGroup)
 
@@ -454,6 +459,11 @@ func run(ctx context.Context) {
 		RedirectDomains:           redirectDomainsList,
 		Target:                    *target,
 		WebmasterEmail:            *webmasterEmail,
+		BrandName:                 *brandName,
+		BrandLink:                 *brandLink,
+		ChallengeTitle:            *challengeTitle,
+		ErrorTitle:                *errorTitle,
+		OverlayDir:                *overlayDir,
 		OpenGraph:                 policy.OpenGraph,
 		CookieSecure:              *cookieSecure,
 		CookieHttpOnly:            *cookieHttpOnly,

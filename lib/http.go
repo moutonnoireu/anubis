@@ -282,6 +282,20 @@ func mergeExtensions(r *http.Request, chall *challenge.Challenge, component temp
 	return templ.Join(result...), nil
 }
 
+func (s *Server) challengeTitle(localizer *localization.SimpleLocalizer) string {
+	if s.opts.ChallengeTitle != "" {
+		return s.opts.ChallengeTitle
+	}
+	return localizer.T("making_sure_not_bot")
+}
+
+func (s *Server) errorTitle(localizer *localization.SimpleLocalizer) string {
+	if s.opts.ErrorTitle != "" {
+		return s.opts.ErrorTitle
+	}
+	return localizer.T("oh_noes")
+}
+
 func (s *Server) RenderIndex(w http.ResponseWriter, r *http.Request, cr policy.CheckResult, rule *policy.Bot, returnHTTPStatusOnly bool) {
 	localizer := localization.GetLocalizer(r)
 
@@ -378,7 +392,7 @@ func (s *Server) RenderIndex(w http.ResponseWriter, r *http.Request, cr policy.C
 	}
 
 	page := web.BaseWithChallengeAndOGTags(
-		localizer.T("making_sure_not_bot"),
+		s.challengeTitle(localizer),
 		component,
 		s.policy.Impressum,
 		s.policy.Honeypot,
@@ -444,7 +458,7 @@ func (s *Server) respondWithStatus(w http.ResponseWriter, r *http.Request, msg, 
 	localizer := localization.GetLocalizer(r)
 
 	component := web.Base(
-		localizer.T("oh_noes"),
+		s.errorTitle(localizer),
 		web.ErrorPage(msg, s.opts.WebmasterEmail, code, localizer),
 		s.policy.Impressum,
 		s.policy.Honeypot,

@@ -1,7 +1,12 @@
-# Anubis
+# Medee
+
+> Fork corporate de [Anubis](https://github.com/TecharoHQ/anubis) (licence MIT,
+> voir LICENSE) avec nom, textes, images et CSS personnalisables sans rebuild :
+> `BRAND_NAME`, `BRAND_LINK`, `CHALLENGE_TITLE`, `ERROR_TITLE`, `OVERLAY_DIR`.
+> Détails dans [`branding/`](branding/README.md).
 
 <center>
-<img width=256 src="./web/static/img/happy.webp" alt="A smiling chibi dark-skinned anthro jackal with brown hair and tall ears looking victorious with a thumbs-up" />
+<img width=256 src="./web/static/img/happy.webp" alt="Icône de validation du contrôle de sécurité" />
 </center>
 
 ![enbyware](https://pride-badges.pony.workers.dev/static/v1?label=enbyware&labelColor=%23555&stripeWidth=8&stripeColors=FCF434%2CFFFFFF%2C9C59D1%2C2C2C2C)

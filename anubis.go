@@ -24,13 +24,21 @@ func init() {
 // This is set from the Go module runtime version.
 var Version = "devel"
 
-// CookieName is the name of the cookie that Anubis uses in order to validate
-// access.
-var CookieName = "techaro.lol-anubis"
+// BrandName is the product name shown on challenge and error pages.
+// Defaults to "Medee" (corporate fork), override with BRAND_NAME.
+var BrandName = "Medee"
 
-// TestCookieName is the name of the cookie that Anubis uses in order to check
+// BrandLink is an optional URL linked from the brand name in the footer.
+// Empty means no link. Override with BRAND_LINK.
+var BrandLink = ""
+
+// CookieName is the prefix of the cookies that Medee uses in order to validate
+// access.
+var CookieName = "medee"
+
+// TestCookieName is the name of the cookie that Medee uses in order to check
 // if cookies are enabled on the client's browser.
-var TestCookieName = "techaro.lol-anubis-cookie-verification"
+var TestCookieName = "medee-cookie-verification"
 
 // OriginalRefererCookieName carries the Referer header seen on the request that
 // triggered a challenge across the redirect back to the original URL. Browsers
@@ -38,7 +46,7 @@ var TestCookieName = "techaro.lol-anubis-cookie-verification"
 // without this relay upstream analytics see the challenge page as the referer
 // instead of the site the visitor actually came from. See
 // https://github.com/TecharoHQ/anubis/issues/1596
-var OriginalRefererCookieName = "techaro.lol-anubis-original-referer"
+var OriginalRefererCookieName = "medee-original-referer"
 
 // CookieDefaultExpirationTime is the amount of time before the cookie/JWT expires.
 const CookieDefaultExpirationTime = 7 * 24 * time.Hour
